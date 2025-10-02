@@ -28,7 +28,7 @@ jobs:
         with:
           python-version: '3.11'
       - run: pip install pandas
-      - run: python scrape.py
+      - run: python main.py
       - run: mkdir -p public && cp output.html public/index.html
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
