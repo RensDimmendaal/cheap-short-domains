@@ -26,6 +26,11 @@ html_with_css = f'''<!DOCTYPE html>
 <body>
 <main>
 <h1>Short domains up for grabs!</h1>
+
+<p>This page tracks short domains that are up for grabs on Namecheap auction marketplace. I filter for domains that are less than 50 dollars, have no bids, and are expiring today. It is updated every hour.</p>
+
+<p><i>(yes I'm aware of the irony that the url of this page is extremely long)</i></p>
+
 {html}
 </main>
 </body>
