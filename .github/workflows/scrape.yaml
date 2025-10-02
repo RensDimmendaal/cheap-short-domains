@@ -1,14 +1,24 @@
-name: Scrape and Deploy
+name: Scrape and Deploy to Pages
+
 on:
   schedule:
     - cron: '0 * * * *'
   workflow_dispatch:
+
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
-  scrape:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -18,15 +28,9 @@ jobs:
       - run: pip install pandas
       - run: python scrape.py
       - run: mkdir -p public && cp output.html public/index.html
-      - uses: actions/upload-pages-artifact@v2
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
         with:
-          path: public
-  deploy:
-    needs: scrape
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - uses: actions/deploy-pages@v2
-        id: deployment
+          path: 'public'
+      - id: deployment
+        uses: actions/deploy-pages@v4
