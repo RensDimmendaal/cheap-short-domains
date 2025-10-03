@@ -11,7 +11,7 @@ sdf = (df
     .loc[lambda d: d['renewPrice'] < 50]
 )
 
-html = (sdf
+html_table = (sdf
     .sort_values('endDate')
     .assign(name = lambda d: d.apply(lambda row: f'<a href="{row.url}" target="_blank">{row["name"]}</a>', axis=1),
             end_date_iso = lambda d: pd.to_datetime(d.endDate, utc=True).dt.strftime('%Y-%m-%dT%H:%M:%S.%fZ'))
@@ -20,7 +20,7 @@ html = (sdf
     .style.format(dict(price='${:.0f}', renewPrice='${:.0f}'))
     .to_html())
 
-html_with_css = f'''<!DOCTYPE html>
+html = f'''<!DOCTYPE html>
 <html>
 <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
 <body><main>
@@ -32,7 +32,7 @@ You can browse the full Namecheap marketplace <a href="https://www.namecheap.com
 The code for this site is open source and available <a href="https://github.com/rensdimmendaal/cheap-short-domains" target="_blank">on GitHub</a>.
 </p>
 <p><i>(yes I'm aware of the irony that the url of this page is extremely long)</i></p>
-{html}
+{html_table}
 
 <script>
 function updateCountdowns() {{
@@ -64,4 +64,4 @@ setInterval(updateCountdowns, 60000);
 </main></body>
 </html>'''
 
-with open('output.html', 'w') as f: f.write(html_with_css)
+with open('output.html', 'w') as f: f.write(html)
