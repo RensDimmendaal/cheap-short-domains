@@ -6,10 +6,10 @@ df = pd.read_csv("https://d3ry1h4w5036x1.cloudfront.net/reports/Namecheap_Market
 
 sdf = (df
     .loc[lambda d: d['name'].str.contains(pattern,regex=True)]
-    .loc[lambda d: d['price'] < 50]
     .loc[lambda d: d['bidCount'] == 0]
+    .loc[lambda d: d['price'] < 50]
     .loc[lambda d: d['renewPrice'] < 50]
-    .loc[lambda d: pd.to_datetime(d['endDate']).dt.date == pd.Timestamp.today().date()])
+)
 
 html = (sdf
     .sort_values('endDate')
@@ -23,17 +23,13 @@ html = (sdf
 html_with_css = f'''<!DOCTYPE html>
 <html>
 <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
-<body>
-<main>
+<body><main>
 <h1>Short domains up for grabs!</h1>
-
-<p>This page tracks short domains that are up for grabs on Namecheap auction marketplace. I filter for domains that are less than 50 dollars, have no bids, and are expiring today. It is updated every hour.</p>
-
+<p>This page lists short, no-bid Namecheap auction domains under $50, sorted by expiration date. Updated hourly.</p>
+<p>Short domains are conveneint: easy to type, and easy to remember. But, obtaining a 3-letter domain name directly is usually difficult and costly. Luckily, these no-bid auctions can be a practical way to find a short domain for a business, project, or personal use.</p>
 <p><i>(yes I'm aware of the irony that the url of this page is extremely long)</i></p>
-
 {html}
-</main>
-</body>
+</main></body>
 </html>'''
 
 with open('output.html', 'w') as f: f.write(html_with_css)
