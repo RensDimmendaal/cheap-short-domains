@@ -36,23 +36,28 @@ The code for this site is open source and available <a href="https://github.com/
 
 <script>
 function updateCountdowns() {{
-    const endDateCells = document.querySelectorAll('td.col3');
+    const endDateCells = document.querySelectorAll('td.data[class*="col3"]');
     const now = new Date();
-    
+
     endDateCells.forEach(cell => {{
-        const endDate = new Date(cell.textContent);
+        // Store original date on first run
+        if (!cell.dataset.endDate) {{
+            cell.dataset.endDate = cell.textContent.trim();
+        }}
+
+        const endDate = new Date(cell.dataset.endDate);
         const diff = endDate - now;
-        
+
         if (diff <= 0) {{
             cell.textContent = 'EXPIRED';
             cell.style.color = 'red';
             return;
         }}
-        
+
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));
         const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        
+
         cell.textContent = `${{days}}d ${{hours}}h ${{minutes}}m`;
     }});
 }}
